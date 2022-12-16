@@ -16,6 +16,7 @@ export class DatabaseVersionControlService {
       './src/core/sql/graph_create_or_read_word_sequence.sql',
     );
     await this.runSqlFile('./src/core/sql/graph_build_textual_nodes.sql');
+    await this.runSqlFile('./src/core/sql/graph_utils.sql');
   }
 
   async runSqlFile(path: string) {
