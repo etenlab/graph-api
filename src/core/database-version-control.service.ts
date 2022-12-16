@@ -12,6 +12,9 @@ export class DatabaseVersionControlService {
   async upsert_procedures() {
     await this.runSqlFile('./src/core/sql/graph_create_or_read_word.sql');
     await this.runSqlFile('./src/core/sql/graph_create_word_sequence.sql');
+    await this.runSqlFile(
+      './src/core/sql/graph_create_or_read_word_sequence.sql',
+    );
     await this.runSqlFile('./src/core/sql/graph_build_textual_nodes.sql');
   }
 
