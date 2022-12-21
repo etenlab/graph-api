@@ -17,6 +17,7 @@ export class DatabaseVersionControlService {
     );
     await this.runSqlFile('./src/core/sql/graph_build_textual_nodes.sql');
     await this.runSqlFile('./src/core/sql/graph_utils.sql');
+    await this.runSqlFile('./src/core/sql/graph_add_relationship.sql');
   }
 
   async runSqlFile(path: string) {

@@ -27,19 +27,12 @@ begin
 
     raise notice '%', v_word_id;
 
-    -- attach to word sequence
-    insert into relationships (relationship_type, from_node_id, to_node_id) 
-    values ('word-sequence-to-word', p_word_sequence_id, v_word_id)
-    returning relationship_id
-    into v_rel_id;
-
-    insert into relationship_property_keys (relationship_id, property_key)
-    values (v_rel_id, 'position')
-    returning relationship_property_key_id
-    into v_rel_property_key_id;
-
-    insert into relationship_property_values (relationship_property_key_id, property_value)
-    values (v_rel_property_key_id, ('{"value":' || v_counter || '}')::json);
+    call graph_add_relationship(
+      'word-sequence-to-word',
+      p_word_sequence_id,
+      v_word_id,
+      ('{"position": {"value": ' || v_counter || '}}')::json
+    );
 
   end loop;
 
