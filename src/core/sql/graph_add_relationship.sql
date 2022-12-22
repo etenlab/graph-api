@@ -18,9 +18,9 @@ begin
   );
 
   insert into relationships (relationship_type, from_node_id, to_node_id) 
-    values (p_relationship_type, p_from_node_id, p_to_node_id)
-    returning relationship_id
-    into v_rel_id;
+  values (p_relationship_type, p_from_node_id, p_to_node_id)
+  returning relationship_id
+  into v_rel_id;
 
   if cardinality(v_keys) > 0 then
     foreach v_key in array v_keys loop

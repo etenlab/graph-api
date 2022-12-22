@@ -4,8 +4,6 @@ create or replace procedure graph_create_or_read_word(
 )
 language plpgsql
 as $$
-declare
-  v_node_property_key_id bigint;
 begin
 
   select nodes.node_id
@@ -20,22 +18,12 @@ begin
 
   if found then
     return;
-  else    
-
-    insert into nodes (node_type) 
-    values ('word')
-    returning node_id
-    into p_word_id;
-
-    insert into node_property_keys (node_id, property_key)
-    values (p_word_id, 'word_name')
-    returning node_property_key_id
-    into v_node_property_key_id;
-
-    insert into node_property_values (node_property_key_id, property_value)
-    values (v_node_property_key_id, ('{"value":"' || p_word || '"}')::json);
-
   end if;
 
-end; $$;
+  call graph_add_node(
+    'word',
+    p_word_id,
+    ('{"word_name": {"value": "' || p_word || '"}}')::json
+  );
 
+end; $$;

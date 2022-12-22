@@ -33,9 +33,9 @@ create or replace procedure graph_create_word_sequence_of(p_sequence text)
 language plpgsql
 as $$
 declare
-  p_word_sequence_id bigint;
+  v_word_sequence_id bigint;
 begin
-  call graph_create_word_sequence(p_sequence, p_word_sequence_id);
+  call graph_create_word_sequence(p_sequence, v_word_sequence_id);
 end;
 $$;
 
@@ -43,8 +43,21 @@ create or replace procedure graph_create_or_read_word_sequence_of(p_sequence tex
 language plpgsql
 as $$
 declare
-  p_word_sequence_id bigint;
+  v_word_sequence_id bigint;
 begin
-  call graph_create_or_read_word_sequence(p_sequence, p_word_sequence_id);
+  call graph_create_or_read_word_sequence(p_sequence, v_word_sequence_id);
+end;
+$$;
+
+create or replace procedure graph_add_node_of(
+  in p_node_type text,
+  in p_properties json default '{}'
+)
+language plpgsql
+as $$
+declare
+  v_node_id bigint;
+begin
+  call graph_add_node(p_node_type, v_node_id, p_properties);
 end;
 $$;
