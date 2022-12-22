@@ -23,7 +23,7 @@ begin
   call graph_add_node(
     'word',
     p_word_id,
-    ('{"word_name": {"value": "' || p_word || '"}}')::json
+    json_build_object('word_name', json_build_object('value', p_word))
   );
 
 end; $$;

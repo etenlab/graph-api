@@ -7,7 +7,7 @@ as $$
       n.node_id as id,
       n.node_type as type,
       coalesce(
-        jsonb_object_agg(npk.property_key, npv.property_value->>'value')
+        jsonb_object_agg(npk.property_key, npv.property_value->'value')
         filter (where npk is not null),
         '{}'
       ) as properties,
@@ -44,8 +44,7 @@ as $$
     dn.*,
     case dn.type
       when 'word' then dn.properties->>'word_name'
-      when 'word-sequence'
-      then (
+      when 'word-sequence' then (
         select string_agg(words.value::text, ' ') as words
         from (
           select npv.property_value->>'value' as value

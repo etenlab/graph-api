@@ -30,6 +30,6 @@ begin
       insert into node_property_values (node_property_key_id, property_value)
       values (v_node_property_key_id, p_properties->v_key);
     end loop;
-    end if;
+  end if;
 end;
 $$;

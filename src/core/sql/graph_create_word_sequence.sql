@@ -12,11 +12,7 @@ declare
   v_rel_property_key_id bigint;
 begin
 
-  -- create word sequence node
-  insert into nodes (node_type) 
-  values ('word-sequence')
-  returning node_id
-  into p_word_sequence_id;
+  call graph_add_node('word-sequence', p_word_sequence_id);
 
   foreach s in array string_to_array(p_sequence, chr(32)) loop
     v_counter := v_counter + 1;
@@ -31,7 +27,7 @@ begin
       'word-sequence-to-word',
       p_word_sequence_id,
       v_word_id,
-      ('{"position": {"value": ' || v_counter || '}}')::json
+      json_build_object('position', json_build_object('value', v_counter))
     );
 
   end loop;
