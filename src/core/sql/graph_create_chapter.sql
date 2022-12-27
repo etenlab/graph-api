@@ -15,7 +15,7 @@ begin
   call graph_add_node('chapter', p_chapter_id, p_node_properties);
 
   v_sequences := (
-    select array_agg(text)
+    select coalesce(array_agg(text), array[]::text[])
     from json_array_elements_text(p_verses) as text
   );
 
