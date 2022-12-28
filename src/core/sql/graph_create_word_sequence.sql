@@ -18,7 +18,6 @@ begin
     v_counter := v_counter + 1;
     raise notice '%', s;
 
-    -- create or get the word id
     call graph_create_or_read_word(s, v_word_id);
 
     raise notice '%', v_word_id;

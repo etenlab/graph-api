@@ -25,15 +25,21 @@ begin
     call graph_create_chapter(
       v_chapter_id,
       json_build_object('number', json_build_object('value', v_counter)),
-      json_build_object('position', json_build_object('value', v_counter)),
-      v_chapter->'verses'
+      json_build_object(),
+      coalesce(v_chapter->'verses', json_build_array())
     );
 
     call graph_add_relationship(
       'book-to-chapter',
       p_book_id,
       v_chapter_id,
-      json_build_object('position', json_build_object('value', v_counter))
+      (
+        p_rel_properties::jsonb ||
+        json_build_object(
+          'position',
+          json_build_object('value', v_counter)
+        )::jsonb
+      )::json
     );
   end loop;
 end;

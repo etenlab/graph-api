@@ -25,17 +25,22 @@ begin
     call graph_create_book(
       v_book_id,
       coalesce(v_book->'properties', json_build_object()),
-      json_build_object('position', json_build_object('value', v_counter)),
-      v_book->'chapters'
+      json_build_object(),
+      coalesce(v_book->'chapters', json_build_array())
     );
 
     call graph_add_relationship(
       'bible-to-book',
       p_bible_id,
       v_book_id,
-      json_build_object('position', json_build_object('value', v_counter))
+      (
+        p_rel_properties::jsonb ||
+        json_build_object(
+          'position',
+          json_build_object('value', v_counter)
+        )::jsonb
+      )::json
     );
   end loop;
-
 end;
 $$;

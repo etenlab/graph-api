@@ -33,7 +33,13 @@ begin
       'chapter-to-verse',
       p_chapter_id,
       v_verse_id,
-      json_build_object('position', json_build_object('value', v_counter))
+      (
+        p_rel_properties::jsonb ||
+        json_build_object(
+          'position',
+          json_build_object('value', v_counter)
+        )::jsonb
+      )::json
     );
   end loop;
 end;
