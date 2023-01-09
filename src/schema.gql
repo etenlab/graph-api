@@ -1,0 +1,64 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type NodeType {
+  type_name: String!
+}
+
+type Node {
+  node_id: Int!
+  node_type: String!
+}
+
+type NodePropertyKey {
+  node_property_key_id: Int!
+  node_id: String!
+  property_key: String!
+}
+
+type NodePropertyValue {
+  node_property_value_id: Int!
+  node_property_key_id: String!
+  property_value: String!
+}
+
+type RelationshipType {
+  type_name: String!
+}
+
+type Relationship {
+  relationship_id: Int!
+  relationship_type: String!
+  from_node_id: String!
+  to_node_id: String!
+}
+
+type RelationshipPropertyKey {
+  relationship_property_key_id: Int!
+  relationship_id: String!
+  property_key: String!
+}
+
+type RelationshipPropertyValue {
+  relationship_property_value_id: Int!
+  relationship_property_key_id: String!
+  property_value: String!
+}
+
+type Query {
+  nodeTypes: [NodeType!]!
+  nodes: [Node!]!
+  node(id: Int!): Node!
+  nodePropertyKeys: [NodePropertyKey!]!
+  nodePropertyKey(id: Int!): NodePropertyKey!
+  nodePropertyValues: [NodePropertyValue!]!
+  nodePropertyValue(id: Int!): NodePropertyValue!
+  relationshipTypes: [RelationshipType!]!
+  relationships: [Relationship!]!
+  relationship(id: Int!): Relationship!
+  relationshipPropertyKeys: [RelationshipPropertyKey!]!
+  relationshipPropertyKey(id: Int!): RelationshipPropertyKey!
+  relationshipPropertyValues: [RelationshipPropertyValue!]!
+  relationshipPropertyValue(id: Int!): RelationshipPropertyValue!
+}

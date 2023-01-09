@@ -1,0 +1,23 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { RelationshipPropertyValue } from './relationship_property_value.entity';
+
+@Injectable()
+export class RelationshipPropertyValuesService {
+  constructor(
+    @InjectRepository(RelationshipPropertyValue)
+    private readonly relationshipPropertyValue: Repository<RelationshipPropertyValue>,
+  ) {}
+
+  async findAll(): Promise<Array<RelationshipPropertyValue>> {
+    return await this.relationshipPropertyValue.find();
+  }
+
+  async findOne(id: number): Promise<RelationshipPropertyValue> {
+    return await this.relationshipPropertyValue.findOneBy({
+      relationship_property_value_id: id,
+    });
+  }
+}
