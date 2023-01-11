@@ -54,7 +54,7 @@ import { RelationshipPropertyValuesModule } from './resources/relationship_prope
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {
-    this.importSqlFiles();
+    this.importSqlFiles().then(() => this.seedBibleData());
   }
 
   async importSqlFiles() {
@@ -66,5 +66,42 @@ export class AppModule {
       const data = readFileSync(join(dir, sqlFile), 'utf8');
       await this.dataSource.query(data);
     }
+  }
+
+  async seedBibleData() {
+    const verse1 = 'In the beginning God created the heavens and the earth';
+    const verse2 = 'Now the earth was formless and empty';
+    const chapter = {
+      verses: [verse1, verse2],
+    };
+    const book = {
+      properties: { name: { value: 'Genesis' } },
+      chapters: [chapter],
+    };
+    const bible = {
+      properties: { name: { value: 'NIV' } },
+      books: [book],
+    };
+
+    const sql = `
+      call graph_reset_all();
+
+      do $$
+      declare
+        v_bible_id bigint;
+      begin
+        call graph_create_bible(
+          v_bible_id,
+          '${JSON.stringify(bible.properties)}'::json,
+          json_build_object(),
+          '${JSON.stringify(bible.books)}'::json
+        );
+      end
+      $$;
+
+      select * from graph_build_textual_nodes();
+    `;
+
+    await this.dataSource.query(sql);
   }
 }

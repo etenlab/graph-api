@@ -12,7 +12,12 @@ export class NodesService {
   ) {}
 
   async findAll(): Promise<Array<Node>> {
-    return await this.nodeRepository.find();
+    return await this.nodeRepository
+      .createQueryBuilder('nodes')
+      .innerJoin('nodes.node_type', 'node_type')
+      .select('nodes.node_id', 'node_id')
+      .addSelect('node_type.type_name', 'node_type')
+      .getRawMany();
   }
 
   async findOne(id: number): Promise<Node> {
