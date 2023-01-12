@@ -8,5 +8,6 @@ import { NodePropertyValue } from './node_property_value.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([NodePropertyValue])],
   providers: [NodePropertyValuesResolver, NodePropertyValuesService],
+  exports: [NodePropertyValuesService],
 })
 export class NodePropertyValuesModule {}

@@ -9,6 +9,12 @@ import {
 
 import { NodePropertyKey } from '../node_property_keys/node_property_key.entity';
 
+@ObjectType()
+export class PropertyValue {
+  @Field(() => String)
+  value: string | number;
+}
+
 @Entity({ name: 'node_property_values' })
 @ObjectType()
 export class NodePropertyValue {
@@ -26,6 +32,6 @@ export class NodePropertyValue {
   node_property_key_id: number;
 
   @Column('jsonb', { nullable: true })
-  @Field(() => String)
+  @Field(() => PropertyValue)
   property_value: string;
 }

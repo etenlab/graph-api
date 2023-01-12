@@ -9,18 +9,24 @@ type NodeType {
 type Node {
   node_id: Int!
   node_type: String!
+  propertyKeys: [NodePropertyKey!]!
 }
 
 type NodePropertyKey {
   node_property_key_id: Int!
   node_id: String!
   property_key: String!
+  values: [NodePropertyValue!]!
+}
+
+type PropertyValue {
+  value: String!
 }
 
 type NodePropertyValue {
   node_property_value_id: Int!
   node_property_key_id: String!
-  property_value: String!
+  property_value: PropertyValue!
 }
 
 type RelationshipType {
@@ -49,6 +55,7 @@ type RelationshipPropertyValue {
 type Query {
   nodeTypes: [NodeType!]!
   nodes: [Node!]!
+  nodesBySearch(search: String!): [Node!]!
   node(id: Int!): Node!
   nodePropertyKeys: [NodePropertyKey!]!
   nodePropertyKey(id: Int!): NodePropertyKey!

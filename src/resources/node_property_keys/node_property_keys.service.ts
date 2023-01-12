@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 
 import { NodePropertyKey } from './node_property_key.entity';
 
@@ -11,8 +11,10 @@ export class NodePropertyKeysService {
     private readonly nodePropertyKeyRepository: Repository<NodePropertyKey>,
   ) {}
 
-  async findAll(): Promise<Array<NodePropertyKey>> {
-    return await this.nodePropertyKeyRepository.find();
+  async findAll(
+    options?: FindManyOptions<NodePropertyKey>,
+  ): Promise<Array<NodePropertyKey>> {
+    return await this.nodePropertyKeyRepository.find(options);
   }
 
   async findOne(id: number): Promise<NodePropertyKey> {

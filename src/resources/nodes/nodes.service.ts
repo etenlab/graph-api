@@ -11,13 +11,20 @@ export class NodesService {
     private readonly nodeRepository: Repository<Node>,
   ) {}
 
-  async findAll(): Promise<Array<Node>> {
-    return await this.nodeRepository
+  async findAll({ search }: { search?: string }): Promise<Array<Node>> {
+    const querBuilder = await this.nodeRepository
       .createQueryBuilder('nodes')
       .innerJoin('nodes.node_type', 'node_type')
       .select('nodes.node_id', 'node_id')
-      .addSelect('node_type.type_name', 'node_type')
-      .getRawMany();
+      .addSelect('node_type.type_name', 'node_type');
+
+    if (search) {
+      querBuilder.where('nodes.node_type like :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    return querBuilder.getRawMany();
   }
 
   async findOne(id: number): Promise<Node> {
