@@ -11,5 +11,6 @@ import { RelationshipPropertyValue } from './relationship_property_value.entity'
     RelationshipPropertyValuesResolver,
     RelationshipPropertyValuesService,
   ],
+  exports: [RelationshipPropertyValuesService],
 })
 export class RelationshipPropertyValuesModule {}

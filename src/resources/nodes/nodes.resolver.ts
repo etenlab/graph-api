@@ -10,12 +10,15 @@ import { NodesService } from './nodes.service';
 import { Node } from './node.entity';
 import { NodePropertyKeysService } from '../node_property_keys/node_property_keys.service';
 import { NodePropertyKey } from '../node_property_keys/node_property_key.entity';
+import { Relationship } from '../relationships/relationship.entity';
+import { RelationshipsService } from '../relationships/relationships.service';
 
 @Resolver(() => Node)
 export class NodesResolver {
   constructor(
     private readonly nodesService: NodesService,
     private readonly nodePropertyKeysService: NodePropertyKeysService,
+    private readonly relationshipsService: RelationshipsService,
   ) {}
 
   @Query(() => [Node], { name: 'nodes' })
@@ -36,5 +39,10 @@ export class NodesResolver {
   @ResolveField('propertyKeys', () => [NodePropertyKey])
   findPropertyKeys(@Parent() { node_id }: Node) {
     return this.nodePropertyKeysService.findAll({ where: { node_id } });
+  }
+
+  @ResolveField('relationships', () => [Relationship])
+  findRelationships(@Parent() { node_id }: Node) {
+    return this.relationshipsService.findAll({ node_id });
   }
 }

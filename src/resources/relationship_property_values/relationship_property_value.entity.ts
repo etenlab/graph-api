@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { RelationshipPropertyKey } from '../relationship_property_keys/relationship_property_key.entity';
+import { PropertyValue } from '../node_property_values/node_property_value.entity';
 
 @Entity({ name: 'relationship_property_values' })
 @ObjectType()
@@ -27,6 +28,6 @@ export class RelationshipPropertyValue {
   relationship_property_key_id: number;
 
   @Column('jsonb', { nullable: true })
-  @Field(() => String)
+  @Field(() => PropertyValue)
   property_value: string;
 }

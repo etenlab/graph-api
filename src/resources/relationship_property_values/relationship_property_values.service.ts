@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 
 import { RelationshipPropertyValue } from './relationship_property_value.entity';
 
@@ -11,8 +11,10 @@ export class RelationshipPropertyValuesService {
     private readonly relationshipPropertyValue: Repository<RelationshipPropertyValue>,
   ) {}
 
-  async findAll(): Promise<Array<RelationshipPropertyValue>> {
-    return await this.relationshipPropertyValue.find();
+  async findAll(
+    options?: FindManyOptions<RelationshipPropertyValue>,
+  ): Promise<Array<RelationshipPropertyValue>> {
+    return await this.relationshipPropertyValue.find(options);
   }
 
   async findOne(id: number): Promise<RelationshipPropertyValue> {
