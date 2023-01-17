@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { NodesService } from './nodes.service';
@@ -11,8 +11,9 @@ import { RelationshipsModule } from '../relationships/relationships.module';
   imports: [
     TypeOrmModule.forFeature([Node]),
     NodePropertyKeysModule,
-    RelationshipsModule,
+    forwardRef(() => RelationshipsModule),
   ],
   providers: [NodesResolver, NodesService],
+  exports: [NodesService],
 })
 export class NodesModule {}

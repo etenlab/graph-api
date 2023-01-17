@@ -99,7 +99,26 @@ export class AppModule {
       end
       $$;
 
-      select * from graph_build_textual_nodes();
+      insert into node_property_values (node_property_key_id, property_value)
+      select
+        node_property_key_id,
+        json_build_object(
+          'value',
+          make_new_property_value(property_value->>'value')
+        ) as property_value
+      from node_property_values;
+
+      insert into relationship_property_values (
+        relationship_property_key_id,
+        property_value
+      )
+      select
+        relationship_property_key_id,
+        json_build_object(
+          'value',
+          make_new_property_value(property_value->>'value')
+        ) as property_value
+      from relationship_property_values;
     `;
 
     await this.dataSource.query(sql);

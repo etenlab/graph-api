@@ -61,3 +61,16 @@ begin
   call graph_add_node(p_node_type, v_node_id, p_properties);
 end;
 $$;
+
+create or replace function make_new_property_value(value text)
+returns text
+language plpgsql
+as $$
+begin
+  return case
+    when value ~ '^\d+$' then (value::int + 1)::text
+    when length(value) > 1 then reverse(value)
+    else concat(value, value)
+  end;
+end
+$$;

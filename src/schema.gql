@@ -30,6 +30,8 @@ type Relationship {
   from_node_id: String!
   to_node_id: String!
   propertyKeys: [RelationshipPropertyKey!]!
+  fromNode: Node!
+  toNode: Node!
 }
 
 type PropertyValue {
