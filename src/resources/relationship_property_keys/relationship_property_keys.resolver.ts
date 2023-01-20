@@ -11,12 +11,14 @@ import { RelationshipPropertyKeysService } from './relationship_property_keys.se
 import { RelationshipPropertyKey } from './relationship_property_key.entity';
 import { RelationshipPropertyValuesService } from '../relationship_property_values/relationship_property_values.service';
 import { RelationshipPropertyValue } from '../relationship_property_values/relationship_property_value.entity';
+import { VotesService } from '../votes/votes.service';
 
 @Resolver(() => RelationshipPropertyKey)
 export class RelationshipPropertyKeysResolver {
   constructor(
     private readonly relationshipPropertyKeysService: RelationshipPropertyKeysService,
     private readonly relationshipPropertyValuesService: RelationshipPropertyValuesService,
+    private readonly votesService: VotesService,
   ) {}
 
   @Query(() => [RelationshipPropertyKey], { name: 'relationshipPropertyKeys' })
@@ -36,5 +38,27 @@ export class RelationshipPropertyKeysResolver {
     return this.relationshipPropertyValuesService.findAll({
       where: { relationship_property_key_id },
     });
+  }
+
+  @ResolveField('upVotes', () => Int)
+  findUpVotes(
+    @Parent() { relationship_property_key_id }: RelationshipPropertyKey,
+  ) {
+    return this.votesService.findOfTable(
+      'relationship_property_keys',
+      relationship_property_key_id,
+      true,
+    );
+  }
+
+  @ResolveField('downVotes', () => Int)
+  findDownVotes(
+    @Parent() { relationship_property_key_id }: RelationshipPropertyKey,
+  ) {
+    return this.votesService.findOfTable(
+      'relationship_property_keys',
+      relationship_property_key_id,
+      false,
+    );
   }
 }

@@ -62,7 +62,7 @@ begin
 end;
 $$;
 
-create or replace function make_new_property_value(value text)
+create or replace function make_new_fake_value(value text)
 returns text
 language plpgsql
 as $$

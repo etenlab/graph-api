@@ -5,11 +5,13 @@ import { RelationshipPropertyKeysService } from './relationship_property_keys.se
 import { RelationshipPropertyKeysResolver } from './relationship_property_keys.resolver';
 import { RelationshipPropertyKey } from './relationship_property_key.entity';
 import { RelationshipPropertyValuesModule } from '../relationship_property_values/relationship_property_values.module';
+import { VotesModule } from '../votes/votes.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RelationshipPropertyKey]),
     RelationshipPropertyValuesModule,
+    VotesModule,
   ],
   providers: [
     RelationshipPropertyKeysResolver,

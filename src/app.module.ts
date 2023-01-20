@@ -18,6 +18,9 @@ import { RelationshipTypesModule } from './resources/relationship_types/relation
 import { RelationshipsModule } from './resources/relationships/relationships.module';
 import { RelationshipPropertyKeysModule } from './resources/relationship_property_keys/relationship_property_keys.module';
 import { RelationshipPropertyValuesModule } from './resources/relationship_property_values/relationship_property_values.module';
+import { VotesModule } from './resources/votes/votes.module';
+import { VotablesModule } from './resources/votables/votables.module';
+import { BallotEntriesModule } from './resources/ballot_entries/ballot_entries.module';
 
 @Module({
   imports: [
@@ -48,6 +51,9 @@ import { RelationshipPropertyValuesModule } from './resources/relationship_prope
     RelationshipsModule,
     RelationshipPropertyKeysModule,
     RelationshipPropertyValuesModule,
+    VotesModule,
+    VotablesModule,
+    BallotEntriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -85,6 +91,9 @@ export class AppModule {
 
     const sql = `
       call graph_reset_all();
+      delete from votes;
+      delete from ballot_entries;
+      delete from votables;
 
       do $$
       declare
@@ -104,7 +113,7 @@ export class AppModule {
         node_property_key_id,
         json_build_object(
           'value',
-          make_new_property_value(property_value->>'value')
+          make_new_fake_value(property_value->>'value')
         ) as property_value
       from node_property_values;
 
@@ -116,9 +125,42 @@ export class AppModule {
         relationship_property_key_id,
         json_build_object(
           'value',
-          make_new_property_value(property_value->>'value')
+          make_new_fake_value(property_value->>'value')
         ) as property_value
       from relationship_property_values;
+
+      call make_new_fake_node_prop_keys();
+      call make_new_fake_rel_prop_keys();
+
+      do $$
+      declare
+        v_node_key_ids bigint[];
+        v_node_value_ids bigint[];
+        v_rel_key_ids bigint[];
+        v_rel_value_ids bigint[];
+      begin
+        select array_agg(node_property_key_id)
+        from node_property_keys
+        into v_node_key_ids;
+
+        select array_agg(node_property_value_id)
+        from node_property_values
+        into v_node_value_ids;
+
+        select array_agg(relationship_property_key_id)
+        from relationship_property_keys
+        into v_rel_key_ids;
+
+        select array_agg(relationship_property_value_id)
+        from relationship_property_values
+        into v_rel_value_ids;
+
+        call add_random_votes('node_property_keys', v_node_key_ids);
+        call add_random_votes('node_property_values', v_node_value_ids);
+        call add_random_votes('relationship_property_keys', v_rel_key_ids);
+        call add_random_votes('relationship_property_values', v_rel_value_ids);
+      end
+      $$;
     `;
 
     await this.dataSource.query(sql);

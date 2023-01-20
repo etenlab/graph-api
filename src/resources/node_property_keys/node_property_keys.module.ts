@@ -5,11 +5,13 @@ import { NodePropertyKeysService } from './node_property_keys.service';
 import { NodePropertyKeysResolver } from './node_property_keys.resolver';
 import { NodePropertyKey } from './node_property_key.entity';
 import { NodePropertyValuesModule } from '../node_property_values/node_property_values.module';
+import { VotesModule } from '../votes/votes.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([NodePropertyKey]),
     NodePropertyValuesModule,
+    VotesModule,
   ],
   providers: [NodePropertyKeysResolver, NodePropertyKeysService],
   exports: [NodePropertyKeysService],
