@@ -35,10 +35,7 @@ begin
       v_book_id,
       (
         p_rel_properties::jsonb ||
-        json_build_object(
-          'position',
-          json_build_object('value', v_counter)
-        )::jsonb
+        json_build_object('position', v_counter)::jsonb
       )::json
     );
   end loop;

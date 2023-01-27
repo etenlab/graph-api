@@ -10,12 +10,15 @@ import {
 import { NodePropertyValuesService } from './node_property_values.service';
 import { NodePropertyValue } from './node_property_value.entity';
 import { VotesService } from '../votes/votes.service';
+import { Post } from '../posts/post.entity';
+import { PostsService } from '../posts/posts.service';
 
 @Resolver(() => NodePropertyValue)
 export class NodePropertyValuesResolver {
   constructor(
     private readonly nodePropertyValuesService: NodePropertyValuesService,
     private readonly votesService: VotesService,
+    private readonly postsService: PostsService,
   ) {}
 
   @Query(() => [NodePropertyValue], { name: 'nodePropertyValues' })
@@ -43,6 +46,14 @@ export class NodePropertyValuesResolver {
       'node_property_values',
       node_property_value_id,
       false,
+    );
+  }
+
+  @ResolveField('posts', () => [Post])
+  findPosts(@Parent() { node_property_value_id }: NodePropertyValue) {
+    return this.postsService.findOfTable(
+      'node_property_values',
+      node_property_value_id,
     );
   }
 }

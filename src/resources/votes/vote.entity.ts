@@ -9,7 +9,7 @@ import {
 
 import { BallotEntry } from '../ballot_entries/ballot_entry.entity';
 
-@Entity({ name: 'votes' })
+@Entity({ name: 'votes', schema: 'admin' })
 @ObjectType()
 export class Vote {
   @PrimaryGeneratedColumn({ type: 'bigint' })

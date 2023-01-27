@@ -21,6 +21,8 @@ import { RelationshipPropertyValuesModule } from './resources/relationship_prope
 import { VotesModule } from './resources/votes/votes.module';
 import { VotablesModule } from './resources/votables/votables.module';
 import { BallotEntriesModule } from './resources/ballot_entries/ballot_entries.module';
+import { DiscussionsModule } from './resources/discussions/discussions.module';
+import { PostsModule } from './resources/posts/posts.module';
 
 @Module({
   imports: [
@@ -54,6 +56,8 @@ import { BallotEntriesModule } from './resources/ballot_entries/ballot_entries.m
     VotesModule,
     VotablesModule,
     BallotEntriesModule,
+    DiscussionsModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -75,94 +79,29 @@ export class AppModule {
   }
 
   async seedBibleData() {
-    const verse1 = 'In the beginning God created the heavens and the earth';
-    const verse2 = 'Now the earth was formless and empty';
+    const verse1 = {
+      properties: { 'verse-identifier': '1-2' },
+      text: 'In the beginning God created the heavens and the earth',
+    };
+    const verse2 = {
+      properties: { 'verse-identifier': '3-5' },
+      text: 'Now the earth was formless and empty',
+    };
     const chapter = {
+      properties: { 'chapter-identifier': 9 },
       verses: [verse1, verse2],
     };
     const book = {
-      properties: { name: { value: 'Genesis' } },
+      properties: { name: 'Genesis' },
       chapters: [chapter],
     };
     const bible = {
-      properties: { name: { value: 'NIV' } },
+      properties: { name: 'NIV' },
       books: [book],
     };
 
-    const sql = `
-      call graph_reset_all();
-      delete from votes;
-      delete from ballot_entries;
-      delete from votables;
-
-      do $$
-      declare
-        v_bible_id bigint;
-      begin
-        call graph_create_bible(
-          v_bible_id,
-          '${JSON.stringify(bible.properties)}'::json,
-          json_build_object(),
-          '${JSON.stringify(bible.books)}'::json
-        );
-      end
-      $$;
-
-      insert into node_property_values (node_property_key_id, property_value)
-      select
-        node_property_key_id,
-        json_build_object(
-          'value',
-          make_new_fake_value(property_value->>'value')
-        ) as property_value
-      from node_property_values;
-
-      insert into relationship_property_values (
-        relationship_property_key_id,
-        property_value
-      )
-      select
-        relationship_property_key_id,
-        json_build_object(
-          'value',
-          make_new_fake_value(property_value->>'value')
-        ) as property_value
-      from relationship_property_values;
-
-      call make_new_fake_node_prop_keys();
-      call make_new_fake_rel_prop_keys();
-
-      do $$
-      declare
-        v_node_key_ids bigint[];
-        v_node_value_ids bigint[];
-        v_rel_key_ids bigint[];
-        v_rel_value_ids bigint[];
-      begin
-        select array_agg(node_property_key_id)
-        from node_property_keys
-        into v_node_key_ids;
-
-        select array_agg(node_property_value_id)
-        from node_property_values
-        into v_node_value_ids;
-
-        select array_agg(relationship_property_key_id)
-        from relationship_property_keys
-        into v_rel_key_ids;
-
-        select array_agg(relationship_property_value_id)
-        from relationship_property_values
-        into v_rel_value_ids;
-
-        call add_random_votes('node_property_keys', v_node_key_ids);
-        call add_random_votes('node_property_values', v_node_value_ids);
-        call add_random_votes('relationship_property_keys', v_rel_key_ids);
-        call add_random_votes('relationship_property_values', v_rel_value_ids);
-      end
-      $$;
-    `;
-
-    await this.dataSource.query(sql);
+    await this.dataSource.query(
+      `call seed_dev_data('${JSON.stringify(bible)}'::json)`,
+    );
   }
 }

@@ -11,6 +11,8 @@ import { NodePropertyKey } from './node_property_key.entity';
 import { NodePropertyValuesService } from '../node_property_values/node_property_values.service';
 import { NodePropertyValue } from '../node_property_values/node_property_value.entity';
 import { VotesService } from '../votes/votes.service';
+import { Post } from '../posts/post.entity';
+import { PostsService } from '../posts/posts.service';
 
 @Resolver(() => NodePropertyKey)
 export class NodePropertyKeysResolver {
@@ -18,6 +20,7 @@ export class NodePropertyKeysResolver {
     private readonly nodePropertyKeysService: NodePropertyKeysService,
     private readonly nodePropertyValuesService: NodePropertyValuesService,
     private readonly votesService: VotesService,
+    private readonly postsService: PostsService,
   ) {}
 
   @Query(() => [NodePropertyKey], { name: 'nodePropertyKeys' })
@@ -52,6 +55,14 @@ export class NodePropertyKeysResolver {
       'node_property_keys',
       node_property_key_id,
       false,
+    );
+  }
+
+  @ResolveField('posts', () => [Post])
+  findPosts(@Parent() { node_property_key_id }: NodePropertyKey) {
+    return this.postsService.findOfTable(
+      'node_property_keys',
+      node_property_key_id,
     );
   }
 }

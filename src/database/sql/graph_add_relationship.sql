@@ -33,7 +33,10 @@ begin
         relationship_property_key_id,
         property_value
       )
-      values (v_rel_property_key_id, p_properties->v_key);
+      values (
+        v_rel_property_key_id,
+        json_build_object('value', p_properties->v_key)
+      );
     end loop;
   end if;
 end;

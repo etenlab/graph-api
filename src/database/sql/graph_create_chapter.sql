@@ -7,26 +7,29 @@ create or replace procedure graph_create_chapter(
 language plpgsql
 as $$
 declare
-  v_sequences text[];
-  v_sequence text;
+  v_verses json[];
+  v_verse json;
   v_counter int := 0;
   v_verse_id bigint;
 begin
   call graph_add_node('chapter', p_chapter_id, p_node_properties);
 
-  v_sequences := (
-    select coalesce(array_agg(text), array[]::text[])
-    from json_array_elements_text(p_verses) as text
+  v_verses := (
+    select coalesce(array_agg(verse), array[]::json[])
+    from json_array_elements(p_verses) as verse
   );
 
-  foreach v_sequence in array v_sequences loop
+  foreach v_verse in array v_verses loop
     v_counter := v_counter + 1;
 
     call graph_create_verse(
       v_verse_id,
-      json_build_object('number', json_build_object('value', v_counter)),
-      json_build_object('position', json_build_object('value', v_counter)),
-      v_sequence
+      (
+        (v_verse->'properties')::jsonb ||
+        json_build_object('position', v_counter)::jsonb
+      )::json,
+      json_build_object('position', v_counter),
+      v_verse->>'text'
     );
 
     call graph_add_relationship(
@@ -35,10 +38,7 @@ begin
       v_verse_id,
       (
         p_rel_properties::jsonb ||
-        json_build_object(
-          'position',
-          json_build_object('value', v_counter)
-        )::jsonb
+        json_build_object('position', v_counter)::jsonb
       )::json
     );
   end loop;

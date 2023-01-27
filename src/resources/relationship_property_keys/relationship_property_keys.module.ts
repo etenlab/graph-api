@@ -6,12 +6,14 @@ import { RelationshipPropertyKeysResolver } from './relationship_property_keys.r
 import { RelationshipPropertyKey } from './relationship_property_key.entity';
 import { RelationshipPropertyValuesModule } from '../relationship_property_values/relationship_property_values.module';
 import { VotesModule } from '../votes/votes.module';
+import { PostsModule } from '../posts/posts.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RelationshipPropertyKey]),
     RelationshipPropertyValuesModule,
     VotesModule,
+    PostsModule,
   ],
   providers: [
     RelationshipPropertyKeysResolver,

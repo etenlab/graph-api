@@ -24,7 +24,10 @@ begin
 
     call graph_create_chapter(
       v_chapter_id,
-      json_build_object('number', json_build_object('value', v_counter)),
+      (
+        (v_chapter->'properties')::jsonb ||
+        json_build_object('position', v_counter)::jsonb
+      )::json,
       json_build_object(),
       coalesce(v_chapter->'verses', json_build_array())
     );
@@ -35,10 +38,7 @@ begin
       v_chapter_id,
       (
         p_rel_properties::jsonb ||
-        json_build_object(
-          'position',
-          json_build_object('value', v_counter)
-        )::jsonb
+        json_build_object('position', v_counter)::jsonb
       )::json
     );
   end loop;

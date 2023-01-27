@@ -20,18 +20,18 @@ begin
   end if;
   
   select id
-  from ballot_entries
+  from admin.ballot_entries
   where table_name=p_table_name and row=p_row
   into v_ballot_entry_id;
   
   if v_ballot_entry_id is null then
-    insert into ballot_entries (table_name, row)
+    insert into admin.ballot_entries (table_name, row)
     values (p_table_name, p_row)
     returning id
     into v_ballot_entry_id;
   end if;
   
-  insert into votes (ballot_entry_id, up)
+  insert into admin.votes (ballot_entry_id, up)
   values (v_ballot_entry_id, p_up);
 end;
 $$;

@@ -26,7 +26,7 @@ begin
       'word-sequence-to-word',
       p_word_sequence_id,
       v_word_id,
-      json_build_object('position', json_build_object('value', v_counter))
+      json_build_object('position', v_counter)
     );
 
   end loop;

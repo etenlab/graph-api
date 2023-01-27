@@ -20,6 +20,7 @@ type NodePropertyKey {
   values: [NodePropertyValue!]!
   upVotes: Int!
   downVotes: Int!
+  posts: [Post!]!
 }
 
 type RelationshipType {
@@ -46,6 +47,7 @@ type NodePropertyValue {
   property_value: PropertyValue!
   upVotes: Int!
   downVotes: Int!
+  posts: [Post!]!
 }
 
 type Votable {
@@ -64,6 +66,18 @@ type Vote {
   up: Boolean!
 }
 
+type Discussion {
+  id: Int!
+  table_name: String!
+  row: Int!
+}
+
+type Post {
+  id: Int!
+  discussion_id: Int!
+  plain_text: String!
+}
+
 type RelationshipPropertyKey {
   relationship_property_key_id: Int!
   relationship_id: String!
@@ -71,6 +85,7 @@ type RelationshipPropertyKey {
   values: [RelationshipPropertyValue!]!
   upVotes: Int!
   downVotes: Int!
+  posts: [Post!]!
 }
 
 type RelationshipPropertyValue {
@@ -79,6 +94,7 @@ type RelationshipPropertyValue {
   property_value: PropertyValue!
   upVotes: Int!
   downVotes: Int!
+  posts: [Post!]!
 }
 
 type Query {
@@ -92,6 +108,8 @@ type Query {
   nodePropertyValue(id: Int!): NodePropertyValue!
   votes: [Vote!]!
   vote(id: Int!): Vote!
+  posts: [Post!]!
+  post(id: Int!): Post!
   relationships: [Relationship!]!
   relationship(id: Int!): Relationship!
   relationshipPropertyKeys: [RelationshipPropertyKey!]!
@@ -102,4 +120,6 @@ type Query {
   votables: [Votable!]!
   ballotEntries: [BallotEntry!]!
   ballotEntry(id: Int!): BallotEntry!
+  discussions: [Discussion!]!
+  discussion(id: Int!): Discussion!
 }
