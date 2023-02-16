@@ -9,19 +9,11 @@ import { Pool } from 'pg';
 @Injectable()
 export class PostgresService {
   readonly pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_URL,
-    database: process.env.DB,
+    user: process.env.DB_USERNAME,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     port: +process.env.DB_PORT!,
   });
 }
-
-/*
-export DB_USER=postgres
-export DB_URL=localhost
-export DB=usq
-export DB_PASSWORD=asdfasdf
-export Db_PORT=5432
-*/
