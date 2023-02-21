@@ -44,6 +44,8 @@ import { PostsModule } from './resources/posts/posts.module';
       database: process.env.DB_NAME,
       synchronize: false,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
+      migrationsRun: true,
+      migrations: [join(__dirname, 'database/migrations/*.js')],
     }),
     NodeTypesModule,
     NodesModule,
