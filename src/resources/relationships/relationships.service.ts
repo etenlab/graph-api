@@ -11,7 +11,10 @@ export class RelationshipsService {
     private readonly relationshipRepository: Repository<Relationship>,
   ) {}
 
-  async findAll({ node_id }: { node_id?: number } = {}): Promise<
+  async findAll({
+    node_id,
+    nested,
+  }: { node_id?: number; nested?: boolean } = {}): Promise<
     Array<Relationship>
   > {
     const querBuilder = this.relationshipRepository
@@ -23,11 +26,17 @@ export class RelationshipsService {
       .addSelect('relationship_type.type_name', 'relationship_type');
 
     if (node_id) {
-      querBuilder
-        .where('relationships.from_node_id = :node_id', {
+      if (!nested) {
+        querBuilder
+          .where('relationships.from_node_id = :node_id', {
+            node_id,
+          })
+          .orWhere('relationships.to_node_id = :node_id', { node_id });
+      } else {
+        querBuilder.where('relationships.from_node_id = :node_id', {
           node_id,
-        })
-        .orWhere('relationships.to_node_id = :node_id', { node_id });
+        });
+      }
     }
 
     return await querBuilder.getRawMany();

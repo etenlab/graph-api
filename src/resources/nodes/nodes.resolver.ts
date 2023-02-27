@@ -31,6 +31,11 @@ export class NodesResolver {
     return this.nodesService.findAll({ search });
   }
 
+  @Query(() => [Node], { name: 'nodesByNodeType' })
+  findByNodeType(@Args('node_type', { type: () => String }) node_type: string) {
+    return this.nodesService.findAll({ node_type });
+  }
+
   @Query(() => Node, { name: 'node' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.nodesService.findOne(id);
@@ -44,5 +49,10 @@ export class NodesResolver {
   @ResolveField('relationships', () => [Relationship])
   findRelationships(@Parent() { node_id }: Node) {
     return this.relationshipsService.findAll({ node_id });
+  }
+
+  @ResolveField('nestedRelationships', () => [Relationship])
+  findNestedRelationships(@Parent() { node_id }: Node) {
+    return this.relationshipsService.findAll({ node_id, nested: true });
   }
 }

@@ -11,6 +11,7 @@ type Node {
   node_type: String!
   propertyKeys: [NodePropertyKey!]!
   relationships: [Relationship!]!
+  nestedRelationships: [Relationship!]!
 }
 
 type NodePropertyKey {
@@ -101,6 +102,7 @@ type Query {
   nodeTypes: [NodeType!]!
   nodes: [Node!]!
   nodesBySearch(search: String!): [Node!]!
+  nodesByNodeType(node_type: String!): [Node!]!
   node(id: Int!): Node!
   nodePropertyKeys: [NodePropertyKey!]!
   nodePropertyKey(id: Int!): NodePropertyKey!

@@ -11,7 +11,13 @@ export class NodesService {
     private readonly nodeRepository: Repository<Node>,
   ) {}
 
-  async findAll({ search }: { search?: string }): Promise<Array<Node>> {
+  async findAll({
+    search,
+    node_type,
+  }: {
+    search?: string;
+    node_type?: string;
+  }): Promise<Array<Node>> {
     const querBuilder = this.nodeRepository
       .createQueryBuilder('nodes')
       .innerJoin('nodes.node_type', 'node_type')
@@ -34,6 +40,8 @@ export class NodesService {
           "LOWER(npv.property_value->>'value') like :search",
           parameters,
         );
+    } else if (node_type) {
+      querBuilder.where('nodes.node_type like :node_type', { node_type });
     }
 
     return await querBuilder.getRawMany();
