@@ -36,10 +36,8 @@ export class NodesService {
           'npv.node_property_key_id=npk.node_property_key_id',
         )
         .where('nodes.node_type like :search', parameters)
-        .orWhere(
-          "LOWER(npv.property_value->>'value') like :search",
-          parameters,
-        );
+        .orWhere("LOWER(npv.property_value->>'value') like :search", parameters)
+        .groupBy('nodes.node_id, node_type.type_name');
     } else if (node_type) {
       querBuilder.where('nodes.node_type like :node_type', { node_type });
     }

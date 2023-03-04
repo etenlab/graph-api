@@ -5,6 +5,7 @@ import {
   Int,
   ResolveField,
   Parent,
+  Mutation,
 } from '@nestjs/graphql';
 
 import { NodePropertyValuesService } from './node_property_values.service';
@@ -12,6 +13,7 @@ import { NodePropertyValue } from './node_property_value.entity';
 import { VotesService } from '../votes/votes.service';
 import { Post } from '../posts/post.entity';
 import { PostsService } from '../posts/posts.service';
+import { CreateNodePropertyValueInput } from './dto/create-node-property-value.input';
 
 @Resolver(() => NodePropertyValue)
 export class NodePropertyValuesResolver {
@@ -20,6 +22,14 @@ export class NodePropertyValuesResolver {
     private readonly votesService: VotesService,
     private readonly postsService: PostsService,
   ) {}
+
+  @Mutation(() => NodePropertyValue)
+  createNodePropertyValue(
+    @Args('createNodePropertyValueInput')
+    createNodePropertyValueInput: CreateNodePropertyValueInput,
+  ) {
+    return this.nodePropertyValuesService.create(createNodePropertyValueInput);
+  }
 
   @Query(() => [NodePropertyValue], { name: 'nodePropertyValues' })
   findAll() {

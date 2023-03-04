@@ -44,7 +44,7 @@ type PropertyValue {
 
 type NodePropertyValue {
   node_property_value_id: Int!
-  node_property_key_id: String!
+  node_property_key_id: Int!
   property_value: PropertyValue!
   upVotes: Int!
   downVotes: Int!
@@ -124,4 +124,13 @@ type Query {
   ballotEntry(id: Int!): BallotEntry!
   discussions: [Discussion!]!
   discussion(id: Int!): Discussion!
+}
+
+type Mutation {
+  createNodePropertyValue(createNodePropertyValueInput: CreateNodePropertyValueInput!): NodePropertyValue!
+}
+
+input CreateNodePropertyValueInput {
+  node_property_key_id: Int!
+  property_value: String!
 }

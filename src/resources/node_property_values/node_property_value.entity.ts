@@ -23,7 +23,7 @@ export class NodePropertyValue {
   node_property_value_id: number;
 
   @Column({ nullable: false })
-  @Field(() => String)
+  @Field(() => Int)
   @ManyToOne(() => NodePropertyKey)
   @JoinColumn({
     name: 'node_property_key_id',
